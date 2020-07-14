@@ -24,19 +24,21 @@ const AddTask = ({ addTask }) => {
   }
 
   return (
-    <div className='row'>
-      <form onSubmit={(e) => handleAddTask(e)}>
-        <button className='btn btn-secondary mx-3' type='submit'>
+    <React.Fragment>
+    <form onSubmit={(e) => handleAddTask(e)}>
+      <div className='row mb-3'>
+        <input className='col-10 form-control' type='text' value={task.title} onChange={(e) => handleChange(e)}  placeholder='Add Task' data-testid='add-task-input'/>
+        <button className='btn col-2' type='submit' style={{fontSize: '1rem'}}>
           +
         </button>
-        <input type='text' value={task.title} onChange={(e) => handleChange(e)}  placeholder='Add Task' />
-      </form>
-      { 
-        errMessage ? (
-          <ErrMessage message='Missing title'/>
-        ) : null
-      }
-    </div>
+      </div>
+    </form> 
+    { 
+      errMessage ? (
+        <ErrMessage message='Missing title'/>
+      ) : null
+    }
+    </React.Fragment>
   )
 }
 
