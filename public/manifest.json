@@ -1,8 +1,16 @@
 {
-  "short_name": "React App",
+	"short_name": "Todo",
   "name": "Todo App",
-  "start_url": ".",
-  "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "icons": [
+    {
+      "src": "/images/logo.png",
+      "type": "image/png",
+      "sizes": "1024x1024"
+    }
+  ],
+	"start_url": ".",
+	"scope": "/",
+	"display": "standalone",
+	"theme_color": "#000000",
+	"background_color": "#ffffff"
 }

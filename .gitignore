@@ -4,3 +4,8 @@
 # misc
 .DS_Store
 
+# deployment
+/build
+.firebaserc
+firebase.json
+/.firebase
