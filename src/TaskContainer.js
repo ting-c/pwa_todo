@@ -31,6 +31,19 @@ const TaskContainer = () => {
   const setDateTime = (id, dateTime) => {
 		appDB.updateTask(id, { dateTime });
 	};
+
+	function filterTasksByCompleted(tasks, isCompleted) {
+		return tasks.filter(task => task.completed === isCompleted)
+		.map(task => 
+				<Task
+					key={task.id}
+					task={task}
+					removeTask={removeTask}
+					setDateTime={setDateTime}
+					toggleCompleted={toggleCompleted}
+				/>
+			);
+	}
 	
   return (
 		<div className="row p-3">
@@ -38,33 +51,13 @@ const TaskContainer = () => {
 				<AddTask addTask={addTask} />
 				<div className="row shadow-sm p-1 rounded">
 					<div className="col" data-testid="tasks">
-						{tasks
-							.filter((task) => !task.completed)
-							.map((task) => (
-								<Task
-									key={task.id}
-									task={task}
-									removeTask={removeTask}
-									setDateTime={setDateTime}
-									toggleCompleted={toggleCompleted}
-								/>
-							))}
+						{filterTasksByCompleted(tasks, false)}
 					</div>
 				</div>
 				<div className="row bg-light shadow-sm p-1 rounded">
 					<div className="col" data-testid="completed-tasks">
 						<h6 className="row font-weight-bold">Completed</h6>
-						{tasks
-							.filter((task) => !!task.completed)
-							.map((task) => (
-								<Task
-									key={task.id}
-									task={task}
-									removeTask={removeTask}
-									setDateTime={setDateTime}
-									toggleCompleted={toggleCompleted}
-								/>
-							))}
+						{filterTasksByCompleted(tasks, true)}
 					</div>
 				</div>
 			</div>
