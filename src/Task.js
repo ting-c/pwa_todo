@@ -17,14 +17,14 @@ const Task = ({ task, removeTask, toggleCompleted, setDateTime }) => {
 							<input
 								type="checkbox"
 								aria-label="Checkbox"
-								onChange={() => toggleCompleted(id)}
+								onChange={() => toggleCompleted(id, completed)}
 								checked
 							/>
 						) : (
 							<input
 								type="checkbox"
 								aria-label="Checkbox"
-								onChange={() => toggleCompleted(id)}
+								onChange={() => toggleCompleted(id, completed)}
 							/>
 						)}
 					</div>
@@ -58,7 +58,7 @@ const Task = ({ task, removeTask, toggleCompleted, setDateTime }) => {
 			</div>
 			<div className="row mb-3 collapse" id={`collapse${id}`}>
 				<DateTimePicker
-					onChange={setDateTime}
+					onChange={(value) => setDateTime(id, value)}
 					value={dateTime}
 					className={["shadow-sm"]}
 				/>

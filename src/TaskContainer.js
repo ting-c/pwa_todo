@@ -1,39 +1,37 @@
 import React, { useState, useEffect } from 'react';
 import Task from './Task';
 import AddTask from './AddTask';
+import { appDB } from './database';
 
 const TaskContainer = () => {
 
-  const [tasks, setTasks] = useState([]);
-  const [currentTaskId, setCurrentTaskId] = useState(0);
+	const [tasks, setTasks] = useState([]);
+
+	useEffect(() => {
+		appDB.getAllTasks().then((tasks) => setTasks(tasks));
+	}, [tasks])
 
   const addTask = (task) => {
-    setTasks([
-      ...tasks, 
-      { title: task.title, id: currentTaskId, completed: false, dateTime: null }
-    ]);
-    setCurrentTaskId(currentTaskId + 1);
+		const taskToAdd = { 
+			title: task.title,
+			completed: false, 
+			dateTime: null 
+		};
+		appDB.addTask(taskToAdd);
   };
 
   const removeTask = (id) => {
-    const currentTasks = tasks.filter( task => task.id !== id );
-    setTasks(currentTasks);
+		appDB.deleteTask(id);
   };
 
-  const toggleCompleted = (id) => {
-    const taskToToggle = tasks.find(task => task.id === id);
-    taskToToggle.completed = !taskToToggle.completed;
-    const updatedTasks = tasks.map(task => task.id === id ? {...taskToToggle} : task);
-    setTasks(updatedTasks);
+  const toggleCompleted = (id, completed) => {
+		appDB.updateTask(id, { completed: !completed });
   };
 
   const setDateTime = (id, dateTime) => {
-    const taskToSetDateTime = tasks.find((task) => task.id === id);
-    taskToSetDateTime.dateTime = dateTime;
-    const updatedTasks = tasks.map(task => task.id === id ? {...taskToSetDateTime} : task);
-    setTasks(updatedTasks);
-  };
-
+		appDB.updateTask(id, { dateTime });
+	};
+	
   return (
 		<div className="row p-3">
 			<div className="col">
