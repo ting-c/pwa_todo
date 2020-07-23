@@ -7,6 +7,7 @@ describe('TaskContainer component', () => {
 
   let tasks_element;
   let completed_tasks_element;
+  
   beforeEach(() => {
     const utils = render(<TaskContainer />);
     const add_task_input = utils.getByTestId('add-task-input');
@@ -14,7 +15,7 @@ describe('TaskContainer component', () => {
     fireEvent.submit(add_task_input);
     tasks_element = utils.getByTestId('tasks');
     completed_tasks_element = utils.getByTestId('completed-tasks');   
-  })
+  });
   
   test('should render task with correct title', () => {
     const input_element = tasks_element.getElementsByTagName('input')[1];

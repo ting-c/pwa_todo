@@ -1,50 +1,58 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Task from './Task';
 import AddTask from './AddTask';
 import { appDB } from './database';
 
 const TaskContainer = () => {
-
+	
 	const [tasks, setTasks] = useState([]);
+	const [isSyncingTasksFromDb, setSyncingTasksFromDb] = useState(true)
 
-	useEffect(() => {
-		appDB.getAllTasks().then((tasks) => setTasks(tasks));
-	}, [tasks])
+	if (isSyncingTasksFromDb) {
+		appDB.getAllTasks().then(tasksFromDb => {
+			setTasks(tasksFromDb);
+			setSyncingTasksFromDb(false);
+		});
+	};
 
-  const addTask = (task) => {
+  const addTask = async (task) => {
 		const taskToAdd = { 
 			title: task.title,
-			completed: false, 
+			isCompleted: false, 
 			dateTime: null 
 		};
-		appDB.addTask(taskToAdd);
+		await appDB.addTask(taskToAdd);
+		setSyncingTasksFromDb(true)
   };
 
-  const removeTask = (id) => {
-		appDB.deleteTask(id);
+  const removeTask = async (id) => {
+		await appDB.deleteTask(id);
+		setSyncingTasksFromDb(true);
   };
 
-  const toggleCompleted = (id, completed) => {
-		appDB.updateTask(id, { completed: !completed });
+  const toggleIsCompleted = async (id, isCompleted) => {
+		await appDB.updateTask(id, { isCompleted: !isCompleted });
+		setSyncingTasksFromDb(true);
   };
 
-  const setDateTime = (id, dateTime) => {
-		appDB.updateTask(id, { dateTime });
+  const setDateTime = async (id, dateTime) => {
+		await appDB.updateTask(id, { dateTime });
+		setSyncingTasksFromDb(true);
 	};
 
 	function filterTasksByCompleted(tasks, isCompleted) {
-		return tasks.filter(task => task.completed === isCompleted)
+		return tasks.filter(task => task.isCompleted === isCompleted)
 		.map(task => 
 				<Task
 					key={task.id}
 					task={task}
 					removeTask={removeTask}
 					setDateTime={setDateTime}
-					toggleCompleted={toggleCompleted}
+					toggleIsCompleted={toggleIsCompleted}
 				/>
 			);
 	}
-	
+
   return (
 		<div className="row p-3">
 			<div className="col">
