@@ -35,10 +35,10 @@ const App = () => {
 		<Router>
 			<Switch>
 				<Route exact path='/'>
-					<TaskContainer />
+					<TaskContainer appDB={appDB} />
 				</Route>
 				<Route exact path='/edit/:id'>
-					<EditTask setNotificationTimers={setNotificationTimers} />
+					<EditTask appDB={appDB} setNotificationTimers={setNotificationTimers} />
 				</Route>
 			</Switch>
 		</Router>

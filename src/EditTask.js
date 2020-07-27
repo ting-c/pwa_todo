@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { appDB } from "./database";
 import { Link, useParams } from "react-router-dom";
 import DateTimePicker from "react-datetime-picker";
 import DateTimeIcon from './img/datetime-icon.png';
 import LoadingSpinner from "./LoadingSpinner";
 
-const EditTask = ({ setNotificationTimers }) => {
+const EditTask = ({ appDB, setNotificationTimers }) => {
 	const { id } = useParams();
 	const [task, setTask] = useState(null);
 	const [isSyncingTaskFromDb, setSyncingTaskFromDb] = useState(true);

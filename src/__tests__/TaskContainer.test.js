@@ -1,39 +1,40 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
-import '@testing-library/jest-dom/extend-expect';
+import { render, fireEvent, act } from '@testing-library/react';
 import TaskContainer from '../TaskContainer';
+import { createDatabase } from "../database";
+import "@testing-library/jest-dom/extend-expect";
+import Dexie from "dexie";
+const indexedDB = require("fake-indexeddb");
+const IDBKeyRange = require("fake-indexeddb/lib/FDBKeyRange");
+
+const db = new Dexie("MyDatabase", {
+	indexedDB: indexedDB,
+	IDBKeyRange: IDBKeyRange,
+});
+
+db.version(1).stores({
+	tasks: "++id",
+});
+
+const appDB = createDatabase(db);
 
 describe('TaskContainer component', () => {
 
-  let tasks_element;
-  let completed_tasks_element;
-  
+  let container;
   beforeEach(() => {
-    const utils = render(<TaskContainer />);
-    const add_task_input = utils.getByTestId('add-task-input');
-    fireEvent.change(add_task_input, { target: { value: "Title 1" } });
-    fireEvent.submit(add_task_input);
-    tasks_element = utils.getByTestId('tasks');
-    completed_tasks_element = utils.getByTestId('completed-tasks');   
-  });
-  
-  test('should render task with correct title', () => {
-    const input_element = tasks_element.getElementsByTagName('div')[1];
-    expect(input_element.value).toBe('Title 1');
+    container = render(<TaskContainer appDB={appDB} />);
   });
 
-  test('should render the completed task in completed-tasks when checkbox is checked', () => {
-    const checkbox = tasks_element.getElementsByTagName("div")[0];
-    fireEvent.click(checkbox);
-    const input_element = completed_tasks_element.getElementsByTagName('div')[1];
-    expect(input_element.value).toBe('Title 1');
+  test('render add task', async () => {
+    expect(container.getByTestId('add-task-input')).toBeDefined();
   });
 
-  test('should NOT render the completed task in tasks when checkbox is checked', () => {
-    const checkbox = tasks_element.getElementsByTagName("div")[0];
-    fireEvent.click(checkbox);
-    const input_element = tasks_element.getElementsByTagName("div")[1];
-    expect(input_element).toBeUndefined();
-  });
-
-})
+  test('update the input field in add task correctly', () => {
+    let input;
+    act(() => {
+      input = container.getByTestId('add-task-input');
+      fireEvent.change(input, { target: { value: 'Title 1' } });
+    })
+    expect(input).toHaveValue('Title 1')
+  })
+});

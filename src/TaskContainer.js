@@ -1,19 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Task from './Task';
 import AddTask from './AddTask';
-import { appDB } from './database';
 
-const TaskContainer = () => {
+const TaskContainer = ({ appDB }) => {
 	
 	const [tasks, setTasks] = useState([]);
-	const [isSyncingTasksFromDb, setSyncingTasksFromDb] = useState(true)
+	const [isSyncingTasksFromDb, setSyncingTasksFromDb] = useState(true);
 
-	if (isSyncingTasksFromDb) {
-		appDB.getAllTasks().then(tasksFromDb => {
-			setTasks(tasksFromDb);
-			setSyncingTasksFromDb(false);
-		});
-	};
+	useEffect(() => {
+		if (isSyncingTasksFromDb) {
+			appDB.getAllTasks().then(tasksFromDb => {
+				setTasks(tasksFromDb);
+				setSyncingTasksFromDb(false);
+			});
+		}
+	})
+
 
   const addTask = async (task) => {
 		const taskToAdd = { 
@@ -48,15 +50,15 @@ const TaskContainer = () => {
 	function filterTasksByCompleted(tasks, isCompleted) {
 		return tasks.filter(task => task.isCompleted === isCompleted)
 		.map(task => 
-				<Task
-					key={task.id}
-					task={task}
-					removeTask={removeTask}
-					setDateTime={setDateTime}
-					toggleIsCompleted={toggleIsCompleted}
-					changeTitle={changeTitle}
-				/>
-			);
+			<Task
+				key={task.id}
+				task={task}
+				removeTask={removeTask}
+				setDateTime={setDateTime}
+				toggleIsCompleted={toggleIsCompleted}
+				changeTitle={changeTitle}
+			/>
+		);
 	}
 
   return (
@@ -64,15 +66,8 @@ const TaskContainer = () => {
 			<div className="row p-3">
 				<div className="col">
 					<AddTask addTask={addTask} />
-					<div className="row rounded">
-						<div className="col" data-testid="tasks">
-							{filterTasksByCompleted(tasks, false)}
-						</div>
-					</div>
-						<div data-testid="completed-tasks">
-							{filterTasksByCompleted(tasks, true)}
-						</div>
-					
+					{filterTasksByCompleted(tasks, false)}
+					{filterTasksByCompleted(tasks, true)}
 				</div>
 			</div>
 		</div>
