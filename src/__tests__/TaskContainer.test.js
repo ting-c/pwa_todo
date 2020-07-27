@@ -18,21 +18,21 @@ describe('TaskContainer component', () => {
   });
   
   test('should render task with correct title', () => {
-    const input_element = tasks_element.getElementsByTagName('input')[1];
+    const input_element = tasks_element.getElementsByTagName('div')[1];
     expect(input_element.value).toBe('Title 1');
   });
 
   test('should render the completed task in completed-tasks when checkbox is checked', () => {
-    const checkbox = tasks_element.getElementsByTagName("input")[0];
+    const checkbox = tasks_element.getElementsByTagName("div")[0];
     fireEvent.click(checkbox);
-    const input_element = completed_tasks_element.getElementsByTagName('input')[1];
+    const input_element = completed_tasks_element.getElementsByTagName('div')[1];
     expect(input_element.value).toBe('Title 1');
   });
 
   test('should NOT render the completed task in tasks when checkbox is checked', () => {
-    const checkbox = tasks_element.getElementsByTagName("input")[0];
+    const checkbox = tasks_element.getElementsByTagName("div")[0];
     fireEvent.click(checkbox);
-    const input_element = tasks_element.getElementsByTagName('input')[1];
+    const input_element = tasks_element.getElementsByTagName("div")[1];
     expect(input_element).toBeUndefined();
   });
 
