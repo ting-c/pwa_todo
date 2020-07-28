@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import DateTimePicker from "react-datetime-picker";
 import DateTimeIcon from './img/datetime-icon.png';
 import LoadingSpinner from "./LoadingSpinner";
+import TrashIcon from './TrashIcon';
 
 const EditTask = ({ appDB, setNotificationTimers }) => {
 	const { id } = useParams();
@@ -47,23 +48,23 @@ const EditTask = ({ appDB, setNotificationTimers }) => {
 					/>
 					{ 
 						task.dateTime ? (
-						<div className="my-2" style={{width: '100%'}}>
-							<span className="mr-3">{task.dateTime.toString().substr(0, 16)}</span>
-							<span>{task.dateTime.toString().substr(16, 5)}</span>
+						<div className="my-2 text-muted" style={{width: '100%'}}>
+							<div>{task.dateTime.toString().substr(0, 16)}</div>
+							<div>{task.dateTime.toString().substr(16, 5)}</div>
 						</div> ) : ( null )
 					}
 					<Link to='/'>
 						<button
 							type="button"
-							className="btn btn-light"
+							className="btn btn-light float-right"
 							onClick={() => removeTask(task.id)}
 						>
-							Delete Task
+							<TrashIcon/>
 						</button>
 					</Link>
 					<button
 						type="button"
-						className="btn btn-light"
+						className="btn btn-light rounded"
 						onClick={() => setIsShowDateTime(!isShowDatetime)}
 					>
 						<img
@@ -73,7 +74,7 @@ const EditTask = ({ appDB, setNotificationTimers }) => {
 						/>
 					</button>
 					{isShowDatetime ? (
-						<div className="m-1">
+						<div className="m-1 rounded">
 							<DateTimePicker
 								input={false}
 								onChange={(dateTime) => setDateTime(task.id, dateTime, task.title)}
