@@ -24,6 +24,7 @@ const EditTask = ({ isFetchTasksFromDb, setIsFetchTasksFromDb }) => {
 
 	async function removeTask(id) {
 		await appDB.deleteTask(id);
+		setIsFetchTasksFromDb(true);
 	}
 
 	async function setDateTime(id, dateTime) {
@@ -100,44 +101,44 @@ const EditTask = ({ isFetchTasksFromDb, setIsFetchTasksFromDb }) => {
 					<div className="m-1 rounded">
 						<DateTimePicker
 							input={false}
-							onChange={(dateTime) => setDateTime(task.id, dateTime, task.title)}
+							onChange={(dateTime) =>
+								setDateTime(task.id, dateTime, task.title)
+							}
 							value={task.dateTime}
 						/>
 					</div>
 				) : null}
 			</div>
-			<div className="row shadow-sm rounded p-3">
-				<div className="col">
-					{task.category ? (
-						<div className="row align-items-center">
-							<div className="col-10">{task.category}</div>
-							<button
-								className="col-2 btn"
-								type="button"
-								onClick={() => updateCategory(task.id)}
-							>
-								x
-							</button>
-						</div>
-					) : (
-						<form
-							className="row form-group pt-3 px-3 d-flex justify-content-center"
-							onSubmit={(e) => updateCategory(task.id, category, e)}
+			<div className="shadow-sm rounded p-3">
+				{ task.category ? (
+					<div className="row px-3 align-items-center">
+						<div className="col-10">{task.category}</div>
+						<button
+							className="col-2 btn"
+							type="button"
+							onClick={() => updateCategory(task.id)}
 						>
-							<input
-								className="col-10 form-control"
-								type="text"
-								placeholder="Add Category"
-								value={category}
-								onChange={(e) => setCategory(capitalizeString(e.target.value))}
-								required
-							/>
-							<button className="col-2 btn" type="submit" value={category}>
-								+
-							</button>
-						</form>
-					)}
-				</div>
+							x
+						</button>
+					</div>
+				) : (
+					<form
+						className="row form-group pt-3 px-3 d-flex justify-content-center"
+						onSubmit={(e) => updateCategory(task.id, category, e)}
+					>
+						<input
+							className="col-10 form-control"
+							type="text"
+							placeholder="Add Category"
+							value={category}
+							onChange={(e) => setCategory(capitalizeString(e.target.value))}
+							required
+						/>
+						<button className="col-2 btn" type="submit" value={category}>
+							+
+						</button>
+					</form>
+				)}
 			</div>
 		</div>
 	) : (
