@@ -1,68 +1,59 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { appDB } from "./database";
 import Task from './Task';
 import AddTask from './AddTask';
+import { capitalizeString } from './utils';
 
-const TaskContainer = ({ appDB }) => {
-	
-	const [tasks, setTasks] = useState([]);
-	const [isSyncingTasksFromDb, setSyncingTasksFromDb] = useState(true);
-
-	useEffect(() => {
-		if (isSyncingTasksFromDb) {
-			appDB.getAllTasks().then(tasksFromDb => {
-				setTasks(tasksFromDb);
-				setSyncingTasksFromDb(false);
-			});
-		}
-	})
-
-
-  const addTask = async (task) => {
-		const taskToAdd = { 
+const TaskContainer = ({ tasks, setIsFetchTasksFromDb }) => {
+	const addTask = async (task, category = null) => {
+		const taskToAdd = {
 			title: task.title,
-			isCompleted: false, 
-			dateTime: null
+			isCompleted: false,
+			dateTime: null,
+			notification: null,
+			category,
 		};
 		await appDB.addTask(taskToAdd);
-		setSyncingTasksFromDb(true)
-  };
+		setIsFetchTasksFromDb(true);
+	};
 
-  const removeTask = async (id) => {
+	const removeTask = async (id) => {
 		await appDB.deleteTask(id);
-		setSyncingTasksFromDb(true);
-  };
+		setIsFetchTasksFromDb(true);
+	};
 
-  const toggleIsCompleted = async (id, isCompleted) => {
+	const toggleIsCompleted = async (id, isCompleted) => {
 		await appDB.updateTask(id, { isCompleted: !isCompleted });
-		setSyncingTasksFromDb(true);
-  };
+		setIsFetchTasksFromDb(true);
+	};
 
-  const setDateTime = async (id, dateTime) => {
+	const setDateTime = async (id, dateTime) => {
 		await appDB.updateTask(id, { dateTime });
-		setSyncingTasksFromDb(true);
+		setIsFetchTasksFromDb(true);
 	};
 
 	const changeTitle = async (id, title) => {
-		await appDB.updateTask(id, { title });
-		setSyncingTasksFromDb(true);
+		await appDB.updateTask(id, { title: capitalizeString(title) });
+		setIsFetchTasksFromDb(true);
 	};
 
 	function filterTasksByCompleted(tasks, isCompleted) {
-		return tasks.filter(task => task.isCompleted === isCompleted)
-		.map(task => 
-			<Task
-				key={task.id}
-				task={task}
-				removeTask={removeTask}
-				setDateTime={setDateTime}
-				toggleIsCompleted={toggleIsCompleted}
-				changeTitle={changeTitle}
-			/>
-		);
+		return tasks
+			.filter((task) => task.isCompleted === isCompleted)
+			.map((task) => (
+				<Task
+					key={task.id}
+					task={task}
+					removeTask={removeTask}
+					setDateTime={setDateTime}
+					toggleIsCompleted={toggleIsCompleted}
+					changeTitle={changeTitle}
+				/>
+			));
 	}
 
-  return (
-		<div className='container'>
+	return (
+		<div className="container" style={{ zIndex: "1" }}>
 			<div className="row p-3">
 				<div className="col">
 					<AddTask addTask={addTask} />
@@ -72,7 +63,7 @@ const TaskContainer = ({ appDB }) => {
 			</div>
 		</div>
 	);
-}
+};
 
 export default TaskContainer;
 

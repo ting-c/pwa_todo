@@ -6,24 +6,18 @@ const Task = ({ task, toggleIsCompleted }) => {
 	const { title, id, isCompleted } = task;
 
   return (
-		<div className="row input-group animate__animated animate__bounceIn mb-2 p-2 shadow-sm rounded" data-testid={isCompleted ? "completed-tasks" : "tasks"}>
+		<div
+			className="row input-group animate__animated animate__bounceIn mb-2 p-2 shadow-sm rounded"
+			data-testid={isCompleted ? "completed-tasks" : "tasks"}
+		>
 			<div className="col-2">
-				{isCompleted ? (
-					<input
-						type="checkbox"
-						aria-label="Checkbox"
-						onChange={() => toggleIsCompleted(id, isCompleted)}
-						checked
-						data-testid="checkbox"
-					/>
-				) : (
-					<input
-						type="checkbox"
-						aria-label="Checkbox"
-						onChange={() => toggleIsCompleted(id, isCompleted)}
-						data-testid="checkbox"
-					/>
-				)}
+				<input
+					type="checkbox"
+					aria-label="Checkbox"
+					onChange={() => toggleIsCompleted(id, isCompleted)}
+					checked={isCompleted ? true : null }
+					data-testid="checkbox"
+				/>
 			</div>
 			<Link
 				className="col-10"
