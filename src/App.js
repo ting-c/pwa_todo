@@ -4,6 +4,7 @@ import TaskContainer from './TaskContainer';
 import EditTask from './EditTask';
 import Sidebar from './Sidebar';
 import Navbar from './Navbar';
+import Alert from "./Alert";
 import { appDB } from './database';
 import {
 	isNotificationAllowed,
@@ -16,6 +17,9 @@ const App = () => {
 	const [tasks, setTasks] = useState([]);
 	const [isFetchTasksFromDb, setIsFetchTasksFromDb] = useState(true);
 	const [isShowSidebar, setIsShowSidebar] = useState(false);
+	const [isShowAlert, setIsShowAlert] = useState(false);
+	const [alertProps, setAlertProps] = useState(null);
+
 	const uniqueCategories = useRef([]);
 
 	useEffect(() => {
@@ -32,7 +36,6 @@ const App = () => {
 	function getUniqueCategories(tasks) {
 		const categories = tasks.filter(task => !!task.category)
 		.map(task => task.category);
-		console.log(categories)
 		return [...new Set(categories)];
 	};
 
@@ -58,6 +61,7 @@ const App = () => {
 				setIsShowSidebar={setIsShowSidebar}
 				isShowSidebar={isShowSidebar}
 			/>
+			{isShowAlert ? <Alert {...alertProps} setIsShowAlert={setIsShowAlert} /> : null}
 			<Router>
 				{isShowSidebar ? (
 					<Sidebar
@@ -79,6 +83,9 @@ const App = () => {
 							setNotificationTimers={setNotificationTimers}
 							setIsFetchTasksFromDb={setIsFetchTasksFromDb}
 							isFetchTasksFromDb={isFetchTasksFromDb}
+							uniqueCategories={uniqueCategories.current}
+							setIsShowAlert={setIsShowAlert}
+							setAlertProps={setAlertProps}
 						/>
 					</Route>
 				</Switch>

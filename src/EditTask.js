@@ -8,12 +8,19 @@ import SaveIcon from './img/save-icon.png';
 import LoadingSpinner from "./LoadingSpinner";
 import TrashIcon from './TrashIcon';
 
-const EditTask = ({ isFetchTasksFromDb, setIsFetchTasksFromDb }) => {
+const EditTask = ({
+	isFetchTasksFromDb,
+	setIsFetchTasksFromDb,
+	uniqueCategories,
+	setIsShowAlert,
+	setAlertProps,
+}) => {
 	const { id } = useParams();
 	const [task, setTask] = useState(null);
 	const [title, setTitle] = useState("");
 	const [isShowDatetime, setIsShowDateTime] = useState(false);
 	const [category, setCategory] = useState("");
+
 
 	useEffect(() => {
 		appDB.getTask(parseInt(id)).then((task) => {
@@ -33,14 +40,17 @@ const EditTask = ({ isFetchTasksFromDb, setIsFetchTasksFromDb }) => {
 	}
 
 	async function changeTitle(id, title) {
-		console.log(title);
 		if (!title) return;
 		await appDB.updateTask(id, { title });
 		setIsFetchTasksFromDb(true);
+		setAlertProps({message: 'Updated title successfully', type: 'success'})
+		setIsShowAlert(true);
 	}
 
 	async function updateCategory(id, category = null, e = null) {
-		if (e) { e.preventDefault() };
+		if (e) {
+			e.preventDefault();
+		}
 		await appDB.updateTask(id, { category });
 		setIsFetchTasksFromDb(true);
 	}
@@ -59,14 +69,14 @@ const EditTask = ({ isFetchTasksFromDb, setIsFetchTasksFromDb }) => {
 			>
 				<textarea
 					type="text"
-					className="form-control"
+					className="form-control mb-1"
 					id="task-title"
 					value={title}
 					onChange={(e) => setTitle(capitalizeString(e.target.value))}
 					rows="6"
 					style={{ resize: "none", border: "none" }}
 				/>
-				<button className="btn btn-light mt-1" type="submit">
+				<button className="btn btn-light" type="submit">
 					<img src={SaveIcon} alt="save icon" style={{ height: "1rem" }} />
 				</button>
 				<Link to="/">
@@ -110,7 +120,7 @@ const EditTask = ({ isFetchTasksFromDb, setIsFetchTasksFromDb }) => {
 				) : null}
 			</div>
 			<div className="shadow-sm rounded p-3">
-				{ task.category ? (
+				{task.category ? (
 					<div className="row px-3 align-items-center">
 						<div className="col-10">{task.category}</div>
 						<button
@@ -122,22 +132,62 @@ const EditTask = ({ isFetchTasksFromDb, setIsFetchTasksFromDb }) => {
 						</button>
 					</div>
 				) : (
-					<form
-						className="row form-group pt-3 px-3 d-flex justify-content-center"
-						onSubmit={(e) => updateCategory(task.id, category, e)}
-					>
-						<input
-							className="col-10 form-control"
-							type="text"
-							placeholder="Add Category"
-							value={category}
-							onChange={(e) => setCategory(capitalizeString(e.target.value))}
-							required
-						/>
-						<button className="col-2 btn" type="submit" value={category}>
-							+
-						</button>
-					</form>
+					<React.Fragment>
+						<form
+							className="row form-group pt-3 px-3 d-flex justify-content-center"
+							onSubmit={(e) => updateCategory(task.id, category, e)}
+						>
+							{uniqueCategories ? (
+								<div
+									className="input-group"
+									onChange={(e) =>
+										setCategory(capitalizeString(e.target.value))
+									}
+								>
+									<div
+										className="input-group"
+										onChange={(e) => {
+											updateCategory(task.id, e.target.value);
+										}}
+									>
+										<select
+											className="custom-select small font-italic"
+											id="category"
+											aria-label="category select"
+										>
+											<option value={null}>Choose an existing category</option>
+											{uniqueCategories.map((category, idx) => (
+												<option value={category} key={idx}>
+													{category}
+												</option>
+											))}
+										</select>
+									</div>
+								</div>
+							) : null}
+							<div className="input-group mt-3">
+								<input
+									className="form-control"
+									type="text"
+									placeholder="Add a new category"
+									value={category}
+									onChange={(e) =>
+										setCategory(capitalizeString(e.target.value))
+									}
+									required
+								/>
+								<div className="input-group-append">
+									<button
+										className="btn btn-outline-secondary"
+										type="submit"
+										value={category}
+									>
+										+
+									</button>
+								</div>
+							</div>
+						</form>
+					</React.Fragment>
 				)}
 			</div>
 		</div>
