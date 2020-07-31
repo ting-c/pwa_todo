@@ -23,9 +23,9 @@ describe('Task', () => {
       </MemoryRouter>
     );
     
-    expect(screen.getByTestId('checkbox').checked).toEqual(true);
-    expect((screen.getByTestId('task-title')).style.textDecoration).toEqual('line-through');
-    expect((screen.getByTestId('task-title')).style.color).toEqual('grey');
+    expect(screen.getByTestId('checkbox-1').checked).toEqual(true);
+    expect((screen.getByTestId('task-title-1')).style.textDecoration).toEqual('line-through');
+    expect((screen.getByTestId('task-title-1')).style.color).toEqual('grey');
   });
 
   test('checkbox is NOT checked when the task is completed', () => {
@@ -46,7 +46,7 @@ describe('Task', () => {
       </MemoryRouter>
     );
     
-    expect(screen.getByTestId('checkbox').checked).toEqual(false);
+    expect(screen.getByTestId('checkbox-2').checked).toEqual(false);
   });
 
 })

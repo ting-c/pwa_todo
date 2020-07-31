@@ -15,14 +15,14 @@ const Task = ({ task, toggleIsCompleted }) => {
 					aria-label="Checkbox"
 					onChange={() => toggleIsCompleted(id, isCompleted)}
 					checked={isCompleted ? true : null }
-					data-testid="checkbox"
+					data-testid={`checkbox-${id}`}
 				/>
 			</div>
 			<Link
 				className="col-10"
 				to={`/edit/${id}`}
 				label="Task title"
-				data-testid="task-title"
+				data-testid={`task-title-${id}`}
 				style={{
 					color: isCompleted ? "grey" : "black",
 					wordBreak: "break-word",
