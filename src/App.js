@@ -19,19 +19,20 @@ const App = () => {
 	const [isShowSidebar, setIsShowSidebar] = useState(false);
 	const [isShowAlert, setIsShowAlert] = useState(false);
 	const [alertProps, setAlertProps] = useState(null);
+	const [categoryFilter, setCategoryFilter] = useState(null);
 
 	const uniqueCategories = useRef([]);
-
+	console.log(categoryFilter)
 	useEffect(() => {
-		if (isFetchTasksFromDb) {
-			appDB.getAllTasks().then(async (tasks) => {
+		appDB.getAllTasks().then(async (tasks) => {
+			categoryFilter ? 
+				setTasks(tasks.filter(task => task.category === categoryFilter))	:
 				setTasks(tasks);
-				uniqueCategories.current = getUniqueCategories(tasks);
-				if (tasks.length) { await setNotificationTimers(tasks) };
-				setIsFetchTasksFromDb(false);
-			});
-		}
-	}, [isFetchTasksFromDb]);
+			uniqueCategories.current = getUniqueCategories(tasks);
+			if (tasks.length) { await setNotificationTimers(tasks) };
+			setIsFetchTasksFromDb(false);
+		});
+	}, [isFetchTasksFromDb, categoryFilter]);
 
 	function getUniqueCategories(tasks) {
 		const categories = tasks.filter(task => !!task.category)
@@ -61,12 +62,15 @@ const App = () => {
 				setIsShowSidebar={setIsShowSidebar}
 				isShowSidebar={isShowSidebar}
 			/>
-			{isShowAlert ? <Alert {...alertProps} setIsShowAlert={setIsShowAlert} /> : null}
+			{isShowAlert ? (
+				<Alert {...alertProps} setIsShowAlert={setIsShowAlert} />
+			) : null}
 			<Router>
 				{isShowSidebar ? (
 					<Sidebar
 						uniqueCategories={uniqueCategories.current}
 						setIsShowSidebar={setIsShowSidebar}
+						setCategoryFilter={setCategoryFilter}
 					/>
 				) : null}
 				<Switch>

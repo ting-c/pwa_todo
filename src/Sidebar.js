@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-const Sidebar = ({ uniqueCategories, setIsShowSidebar }) => {
+const Sidebar = ({ uniqueCategories, setIsShowSidebar, setCategoryFilter }) => {
 	const [isShowCategories, setIsShowCategories] = useState(false);
 
 	return (
@@ -17,7 +17,10 @@ const Sidebar = ({ uniqueCategories, setIsShowSidebar }) => {
 			<div className="font-weight-bold">
 				<Link
 					to="/"
-					onClick={() => setIsShowSidebar(false)}
+					onClick={() => {
+						setIsShowSidebar(false);
+						setCategoryFilter(null);
+					}}
 					style={{ textDecoration: "none", color: "black" }}
 				>
 					All Tasks
@@ -33,9 +36,19 @@ const Sidebar = ({ uniqueCategories, setIsShowSidebar }) => {
 			{isShowCategories ? (
 				uniqueCategories.length ? (
 					uniqueCategories.map((category, idx) => (
-						<div key={idx} className="animate__animated animate__fadeInDown">
-							{category}
-						</div>
+						<Link
+							to="/"
+							onClick={() => setIsShowSidebar(false)}
+							style={{ textDecoration: "none", color: "black" }}
+							key={idx}
+						>
+							<div
+								className="animate__animated animate__fadeInDown px-1"
+								onClick={() => setCategoryFilter(category)}
+							>
+								{category}
+							</div>
+						</Link>
 					))
 				) : (
 					<div className="text-muted small font-italic">None added</div>
