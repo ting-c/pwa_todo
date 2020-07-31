@@ -22,7 +22,7 @@ const App = () => {
 	const [categoryFilter, setCategoryFilter] = useState(null);
 
 	const uniqueCategories = useRef([]);
-	console.log(categoryFilter)
+	
 	useEffect(() => {
 		appDB.getAllTasks().then(async (tasks) => {
 			categoryFilter ? 
@@ -79,6 +79,7 @@ const App = () => {
 							appDB={appDB}
 							tasks={tasks}
 							setIsFetchTasksFromDb={setIsFetchTasksFromDb}
+							categoryFilter={categoryFilter}
 						/>
 					</Route>
 					<Route exact path="/edit/:id">

@@ -21,7 +21,6 @@ const EditTask = ({
 	const [isShowDatetime, setIsShowDateTime] = useState(false);
 	const [category, setCategory] = useState("");
 
-
 	useEffect(() => {
 		appDB.getTask(parseInt(id)).then((task) => {
 			setTask(task);
@@ -118,6 +117,9 @@ const EditTask = ({
 						/>
 					</div>
 				) : null}
+				{ task.dateTime ? null 
+					 : <div className="m-1 py-1 small text-muted">Add a reminder</div>
+				}
 			</div>
 			<div className="shadow-sm rounded p-3">
 				{task.category ? (
@@ -132,62 +134,60 @@ const EditTask = ({
 						</button>
 					</div>
 				) : (
-					<React.Fragment>
-						<form
-							className="row form-group pt-3 px-3 d-flex justify-content-center"
-							onSubmit={(e) => updateCategory(task.id, category, e)}
+				<form
+					className="row form-group pt-3 px-3 d-flex justify-content-center"
+					onSubmit={(e) => updateCategory(task.id, category, e)}
+				>
+					{uniqueCategories.length ? (
+						<div
+							className="input-group"
+							onChange={(e) =>
+								setCategory(capitalizeString(e.target.value))
+							}
 						>
-							{uniqueCategories ? (
-								<div
-									className="input-group"
-									onChange={(e) =>
-										setCategory(capitalizeString(e.target.value))
-									}
+							<div
+								className="input-group"
+								onChange={(e) => {
+									updateCategory(task.id, e.target.value);
+								}}
+							>
+								<select
+									className="custom-select small font-italic"
+									id="category"
+									aria-label="category select"
 								>
-									<div
-										className="input-group"
-										onChange={(e) => {
-											updateCategory(task.id, e.target.value);
-										}}
-									>
-										<select
-											className="custom-select small font-italic"
-											id="category"
-											aria-label="category select"
-										>
-											<option value={null}>Choose an existing category</option>
-											{uniqueCategories.map((category, idx) => (
-												<option value={category} key={idx}>
-													{category}
-												</option>
-											))}
-										</select>
-									</div>
-								</div>
-							) : null}
-							<div className="input-group mt-3">
-								<input
-									className="form-control"
-									type="text"
-									placeholder="Add a new category"
-									value={category}
-									onChange={(e) =>
-										setCategory(capitalizeString(e.target.value))
-									}
-									required
-								/>
-								<div className="input-group-append">
-									<button
-										className="btn btn-outline-secondary"
-										type="submit"
-										value={category}
-									>
-										+
-									</button>
-								</div>
+									<option value={null}>Choose an existing category</option>
+									{uniqueCategories.map((category, idx) => (
+										<option value={category} key={idx}>
+											{category}
+										</option>
+									))}
+								</select>
 							</div>
-						</form>
-					</React.Fragment>
+						</div>
+					) : null}
+					<div className="input-group mt-3">
+						<input
+							className="form-control"
+							type="text"
+							placeholder="Add a new category"
+							value={category}
+							onChange={(e) =>
+								setCategory(capitalizeString(e.target.value))
+							}
+							required
+						/>
+						<div className="input-group-append">
+							<button
+								className="btn btn-outline-secondary"
+								type="submit"
+								value={category}
+							>
+								+
+							</button>
+						</div>
+					</div>
+				</form>
 				)}
 			</div>
 		</div>

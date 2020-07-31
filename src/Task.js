@@ -8,7 +8,6 @@ const Task = ({ task, toggleIsCompleted }) => {
   return (
 		<div
 			className="row input-group animate__animated animate__bounceIn mb-2 p-2 shadow-sm rounded"
-			data-testid={isCompleted ? "completed-tasks" : "tasks"}
 		>
 			<div className="col-2">
 				<input

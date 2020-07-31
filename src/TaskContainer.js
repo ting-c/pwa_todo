@@ -4,7 +4,7 @@ import Task from './Task';
 import AddTask from './AddTask';
 import { capitalizeString } from './utils';
 
-const TaskContainer = ({ tasks, setIsFetchTasksFromDb }) => {
+const TaskContainer = ({ tasks, setIsFetchTasksFromDb, categoryFilter }) => {
 	const addTask = async (task, category = null) => {
 		const taskToAdd = {
 			title: task.title,
@@ -57,6 +57,9 @@ const TaskContainer = ({ tasks, setIsFetchTasksFromDb }) => {
 			<div className="row p-3">
 				<div className="col">
 					<AddTask addTask={addTask} />
+					<div className="row text-muted bg-light my-2 p-2 rounded">
+						{categoryFilter || 'All Tasks'}
+					</div>
 					{filterTasksByCompleted(tasks, false)}
 					{filterTasksByCompleted(tasks, true)}
 				</div>

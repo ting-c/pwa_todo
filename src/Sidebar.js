@@ -10,11 +10,13 @@ const Sidebar = ({ uniqueCategories, setIsShowSidebar, setCategoryFilter }) => {
 			style={{
 				zIndex: "2",
 				height: "100vh",
-				width: "10rem",
+				width: "15rem",
 				position: "fixed",
+				opacity: '0.9',
+				fontSize: '1.4rem'
 			}}
 		>
-			<div className="font-weight-bold">
+			<div className="p-2">
 				<Link
 					to="/"
 					onClick={() => {
@@ -27,11 +29,11 @@ const Sidebar = ({ uniqueCategories, setIsShowSidebar, setCategoryFilter }) => {
 				</Link>
 			</div>
 			<div
-				className="font-weight-bold"
+				className="p-2"
 				onClick={() => setIsShowCategories(!isShowCategories)}
 			>
 				Categories
-				<span className="ml-1">{isShowCategories ? "▿" : "▹"}</span>
+				<span className="px-1">{isShowCategories ? "▿" : "▹"}</span>
 			</div>
 			{isShowCategories ? (
 				uniqueCategories.length ? (
@@ -39,11 +41,13 @@ const Sidebar = ({ uniqueCategories, setIsShowSidebar, setCategoryFilter }) => {
 						<Link
 							to="/"
 							onClick={() => setIsShowSidebar(false)}
-							style={{ textDecoration: "none", color: "black" }}
+							style={{
+								textDecoration: "none", color: "black",
+								fontWeight: 'lighter' }}
 							key={idx}
 						>
 							<div
-								className="animate__animated animate__fadeInDown px-1"
+								className="animate__animated animate__fadeInDown px-3 py-2"
 								onClick={() => setCategoryFilter(category)}
 							>
 								{category}
