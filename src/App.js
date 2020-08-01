@@ -7,7 +7,6 @@ import Navbar from './Navbar';
 import Alert from "./Alert";
 import { appDB } from './database';
 import {
-	isNotificationAllowed,
 	displayNotification,
 	createTimer,
 } from "./utils";
@@ -33,6 +32,14 @@ const App = () => {
 			setIsFetchTasksFromDb(false);
 		});
 	}, [isFetchTasksFromDb, categoryFilter]);
+
+	const isNotificationAllowed = Notification.requestPermission(function (result) {
+		if (result === "granted") {
+			return true;
+		}
+		alert("Please allow notications to enable reminder feature");
+		return false;
+	});
 
 	function getUniqueCategories(tasks) {
 		const categories = tasks.filter(task => !!task.category)

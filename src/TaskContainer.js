@@ -1,10 +1,9 @@
 import React from 'react';
-import { appDB } from "./database";
 import Task from './Task';
 import AddTask from './AddTask';
 import { capitalizeString } from './utils';
 
-const TaskContainer = ({ tasks, setIsFetchTasksFromDb, categoryFilter }) => {
+const TaskContainer = ({ appDB, tasks, setIsFetchTasksFromDb, categoryFilter }) => {
 	const addTask = async (task, category = null) => {
 		const taskToAdd = {
 			title: task.title,
@@ -57,7 +56,7 @@ const TaskContainer = ({ tasks, setIsFetchTasksFromDb, categoryFilter }) => {
 			<div className="row p-3">
 				<div className="col">
 					<AddTask addTask={addTask} />
-					<div className="row text-muted bg-light my-2 p-2 rounded">
+					<div className="row text-muted bg-light my-2 p-2 rounded" data-testid="category-filter">
 						{categoryFilter || 'All Tasks'}
 					</div>
 					{filterTasksByCompleted(tasks, false)}
